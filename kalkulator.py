@@ -27,7 +27,18 @@ st.title("Kalkulator przychodu na podstawie wynagrodzenia netto")
 
 # Pola do wprowadzenia danych
 C_example = st.number_input("Koszty (C):", min_value=0.0, value=263.22, step=1.0)
-ZUS_example = st.number_input("ZUS:", min_value=0.0, value=1485.31, step=1.0)
+
+# Wybór ZUS (2024 vs 2025)
+ZUS_options = {
+    '2025 - ZUS bez chorobowego': 1646.47,
+    '2025 - ZUS z chorobowym': 1773.96,
+    '2024 - ZUS bez chorobowego': 1485.31,
+    '2024 - ZUS z chorobowym': 1600.45
+}
+
+# Wybór ZUS z listy
+ZUS_example = st.selectbox("Wybierz ZUS (2024 lub 2025):", options=list(ZUS_options.keys()), index=0)
+ZUS_value = ZUS_options[ZUS_example]
 
 # Pole do wyboru docelowej kwoty netto
 target_net = st.number_input("Docelowa kwota netto:", min_value=0.0, value=6350.00, step=1.0)
@@ -36,7 +47,7 @@ target_net = st.number_input("Docelowa kwota netto:", min_value=0.0, value=6350.
 P_min, P_max = 9000, 10000
 
 # Obliczenia
-P_solution_1 = brentq(calculate_net_old, P_min, P_max, args=(C_example, ZUS_example, target_net))
+P_solution_1 = brentq(calculate_net_old, P_min, P_max, args=(C_example, ZUS_value, target_net))
 P_solution_2 = brentq(calculate_net_old, P_min, P_max, args=(C_example, 1773.96, target_net))
 
 # Wyświetlanie wyników
