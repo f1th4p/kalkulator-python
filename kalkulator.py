@@ -52,6 +52,23 @@ ZUS_values = {
     ("2024", "Z chorobowym"): 1600.45
 }
 
+# --- Formularz edycji parametrów ---
+col1, col2 = st.columns(2)
+
+with col1:
+    st.session_state["koszty"] = st.number_input("Koszty (C):", min_value=0.0, value=st.session_state["koszty"], step=1.0)
+
+with col2:
+    st.session_state["target_net"] = st.number_input("Docelowa kwota netto:", min_value=0.0, value=st.session_state["target_net"], step=1.0)
+
+# **Radio Buttony**
+st.session_state["zus_year"] = st.radio("Wybierz rok ZUS:", options=["2025", "2024"], index=["2025", "2024"].index(st.session_state["zus_year"]))
+st.session_state["zus_type"] = st.radio("Rodzaj ZUS:", options=["Bez chorobowego", "Z chorobowym"], index=["Bez chorobowego", "Z chorobowym"].index(st.session_state["zus_type"]))
+
+# Guzik resetowania
+if st.button("Resetuj ustawienia"):
+    reset_settings()
+
 # Pobranie wartości ZUS na podstawie wyboru
 ZUS_value = ZUS_values[(st.session_state["zus_year"], st.session_state["zus_type"])]
 
@@ -85,20 +102,3 @@ else:
     st.write(f"**Prog podatkowy zastosowany:** {details['Prog podatkowy']}")
     st.write(f"**Składka zdrowotna:** {details['Składka zdrowotna']:.2f} zł")
     st.write(f"**Na rękę:** {details['Na rękę']:.2f} zł")
-
-# --- Formularz edycji parametrów ---
-col1, col2 = st.columns(2)
-
-with col1:
-    st.session_state["koszty"] = st.number_input("Koszty (C):", min_value=0.0, value=st.session_state["koszty"], step=1.0)
-
-with col2:
-    st.session_state["target_net"] = st.number_input("Docelowa kwota netto:", min_value=0.0, value=st.session_state["target_net"], step=1.0)
-
-# **Radio Buttony**
-st.session_state["zus_year"] = st.radio("Wybierz rok ZUS:", options=["2025", "2024"], index=["2025", "2024"].index(st.session_state["zus_year"]))
-st.session_state["zus_type"] = st.radio("Rodzaj ZUS:", options=["Bez chorobowego", "Z chorobowym"], index=["Bez chorobowego", "Z chorobowym"].index(st.session_state["zus_type"]))
-
-# Guzik resetowania
-if st.button("Resetuj ustawienia"):
-    reset_settings()
