@@ -1,3 +1,15 @@
+# Automatyczna instalacja wymaganych pakietów (po otwarciu notebooka)
+import sys
+import subprocess
+
+# Instalacja pakietów, jeśli nie są zainstalowane
+packages = ['scipy', 'numpy']
+
+for package in packages:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+print("Pakiety zostały zainstalowane.")
+
 from scipy.optimize import brentq
 
 def calculate_net_old(P, C, ZUS, target_net=6350.00, tax_rate=0.12, tax_deduction=300, health_rate=0.09):
