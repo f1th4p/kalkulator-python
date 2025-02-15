@@ -36,32 +36,28 @@ if "koszty" not in st.session_state:
 # Tytuł strony
 st.title("Kalkulator przychodu na podstawie wynagrodzenia netto")
 
+# Zakres poszukiwań przychodu
+P_min, P_max = 9000, 10000
+
+# Obliczenia wyniku przed formularzem
+ZUS_year = st.session_state["zus_year"]
+ZUS_type = st.session_state["zus_type"]
+ZUS_value = 1646.47 if (ZUS_year == "2025" and ZUS_type == "Bez chorobowego") else 1773.96 if ZUS_year == "2025" else 1485.31 if ZUS_type == "Bez chorobowego" else 1600.45
+P_solution = brentq(calculate_net_old, P_min, P_max, args=(st.session_state["koszty"], ZUS_value, st.session_state["target_net"]))
+
+# Wyświetlenie wyniku na samej górze
+st.write(f"### 📌 Rozwiązanie: Przychód dla {ZUS_year} - {ZUS_type} = **{P_solution:.2f} zł**")
+
 # Przycisk do resetowania
 if st.button("Resetuj ustawienia"):
     reset_settings()
 
 # Pola do wprowadzenia danych
-C_example = st.number_input("Koszty (C):", min_value=0.0, value=st.session_state["koszty"], step=1.0, key="koszty")
+st.session_state["koszty"] = st.number_input("Koszty (C):", min_value=0.0, value=st.session_state["koszty"], step=1.0, key="koszty")
+st.session_state["target_net"] = st.number_input("Docelowa kwota netto:", min_value=0.0, value=st.session_state["target_net"], step=1.0, key="target_net")
 
 # Wybór roku ZUS – guziki jednokrotnego wyboru
-ZUS_year = st.radio("Wybierz rok ZUS:", options=["2025", "2024"], index=0 if st.session_state["zus_year"] == "2025" else 1, horizontal=True, key="zus_year")
+st.session_state["zus_year"] = st.radio("Wybierz rok ZUS:", options=["2025", "2024"], index=0 if st.session_state["zus_year"] == "2025" else 1, horizontal=True, key="zus_year")
 
 # Wybór rodzaju ZUS
-if ZUS_year == "2025":
-    ZUS_type = st.radio("Rodzaj ZUS:", options=["Bez chorobowego", "Z chorobowym"], index=0 if st.session_state["zus_type"] == "Bez chorobowego" else 1, key="zus_type")
-    ZUS_value = 1646.47 if ZUS_type == "Bez chorobowego" else 1773.96
-else:
-    ZUS_type = st.radio("Rodzaj ZUS:", options=["Bez chorobowego", "Z chorobowym"], index=0 if st.session_state["zus_type"] == "Bez chorobowego" else 1, key="zus_type")
-    ZUS_value = 1485.31 if ZUS_type == "Bez chorobowego" else 1600.45
-
-# Pole do wyboru docelowej kwoty netto
-target_net = st.number_input("Docelowa kwota netto:", min_value=0.0, value=st.session_state["target_net"], step=1.0, key="target_net")
-
-# Zakres poszukiwań przychodu
-P_min, P_max = 9000, 10000
-
-# Obliczenia
-P_solution = brentq(calculate_net_old, P_min, P_max, args=(C_example, ZUS_value, target_net))
-
-# Wyświetlanie wyników zaraz pod tytułem
-st.write(f"**Rozwiązanie: Przychód dla {ZUS_year} - {ZUS_type} = {P_solution:.2f} zł**")
+st.session_state["zus_type"] = st.radio("Rodzaj ZUS:", options=["Bez chorobowego", "Z chorobowym"], index=0 if st.session_state["zus_type"] == "Bez chorobowego" else 1, key="zus_type")
