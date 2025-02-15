@@ -48,7 +48,6 @@ P_min, P_max = 9000, 10000
 
 # Obliczenia
 P_solution_1 = brentq(calculate_net_old, P_min, P_max, args=(C_example, ZUS_value, target_net))
-P_solution_2 = brentq(calculate_net_old, P_min, P_max, args=(C_example, 1773.96, target_net))
 
 # Wyświetlanie wyników
 st.write(f"Rozwiązanie: Przychód nowy ZUS bez chorobowego = {P_solution_1:.2f} zł")
