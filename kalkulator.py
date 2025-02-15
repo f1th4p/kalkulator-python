@@ -46,7 +46,7 @@ def reset_settings():
     st.session_state["target_net"] = 6350.00
     st.session_state["zus_year"] = "2025"
     st.session_state["zus_type"] = "Bez chorobowego"
-    st.rerun()
+    # st.rerun()
 
 # Inicjalizacja wartości domyślnych
 if "koszty" not in st.session_state:
